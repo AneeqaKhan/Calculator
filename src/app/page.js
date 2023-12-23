@@ -91,14 +91,22 @@ export default function Home() {
         </div>
         <div className="bg-seaGreen h-auto rounded-xl pt-5 pl-4 pb-6">
           {keys.map((item) => {
-            return (
+           return item.title !== "RESULT" ?
+             (
               <button
                 key={item.id}
                 className="mr-4 mt-4 h-14 w-14 bg-yellowish border-2 rounded-md border-black text-xs font-bold shadow-[2px_2px_0px_0px_#000000]"
               >
                 {item.title}
               </button>
-            );
+            ) : (
+              <button
+                key={item.id}
+                className="mr-4 mt-4 h-14 w-32 bg-yellowish border-2 rounded-md border-black text-xs font-bold shadow-[2px_2px_0px_0px_#000000]"
+              >
+                {item.title}
+              </button>
+            )
           })}
         </div>
       </div>
