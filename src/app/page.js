@@ -82,26 +82,50 @@ export default function Home() {
       title: ".",
     },
   ]);
+  const [input, setInput] = useState(0);
+  const [result, setResult] = useState(0);
+
+  const handleInputClick = (item) => {
+    if(item.title !== "DEL" || item.title !== "LOG" !== item.title !== "=" || item.title !== "RESULT") {
+      setInput((prevInput) => prevInput + item.title);
+    } else if(item.title === "DEL"){
+      setInput('');
+      setResult('Error');
+    }
+  }
+
+  const handleCalculate = () => {
+    try {
+      setResult(eval(expression).toString());
+    } catch (error) {
+      setResult('Error');
+    }
+  }
+
   return (
     <main className="h-screen flex items-center justify-center">
-      <div className="h-5/6 w-80 bg-yellowish rounded-xl border-4 border-black shadow-[20px_20px_0px_0px_#000000]">
+      <div className="h-[551px] w-80 bg-yellowish rounded-xl border-4 border-black shadow-[20px_20px_0px_0px_#000000]">
         <div className="text-right px-5 py-7">
-          <p className="text-4xl font-bold">600</p>
-          <p className="text-sm pt-3">400 + 200</p>
+          <p className="text-4xl font-bold">{result}</p>
+          <p className="text-md pt-3">{input}</p>
         </div>
-        <div className="bg-seaGreen h-auto rounded-xl pt-5 pl-4 pb-6">
+        <div className="bg-seaGreen h-auto rounded-xl pt-5 pl-4 pb-8">
           {keys.map((item) => {
            return item.title !== "RESULT" ?
              (
               <button
                 key={item.id}
-                className="mr-4 mt-4 h-14 w-14 bg-yellowish border-2 rounded-md border-black text-xs font-bold shadow-[2px_2px_0px_0px_#000000]"
+                onClick={() => handleInputClick(item)}
+                className="mr-4 mt-4 h-14 w-14 bg-yellowish border-2 rounded-md border-black text-xs font-bold shadow-[2px_2px_0px_0px_#000000] hover:bg-mint"
               >
                 {item.title}
+                
               </button>
+
             ) : (
               <button
                 key={item.id}
+                onClick={() => handleCalculate()}
                 className="mr-4 mt-4 h-14 w-32 bg-yellowish border-2 rounded-md border-black text-xs font-bold shadow-[2px_2px_0px_0px_#000000]"
               >
                 {item.title}
