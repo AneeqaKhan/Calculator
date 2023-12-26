@@ -89,6 +89,7 @@ export default function Home() {
     if(item.title !== "DEL" || item.title !== "LOG" !== item.title !== "=" || item.title !== "RESULT") {
       setInput((prevInput) => prevInput + item.title);
     } else if(item.title === "DEL"){
+      console.log('inside else if')
       setInput('');
       setResult('Error');
     }
@@ -96,8 +97,10 @@ export default function Home() {
 
   const handleCalculate = () => {
     try {
-      setResult(eval(expression).toString());
+      const result = new Function(`return ${input.replace(/[*]/g, '*')}`)();
+      setResult(result.toString());
     } catch (error) {
+      console.log('error', error)
       setResult('Error');
     }
   }
@@ -107,7 +110,7 @@ export default function Home() {
       <div className="h-[551px] w-80 bg-yellowish rounded-xl border-4 border-black shadow-[20px_20px_0px_0px_#000000]">
         <div className="text-right px-5 py-7">
           <p className="text-4xl font-bold">{result}</p>
-          <p className="text-md pt-3">{input}</p>
+          <p className="text-md pt-3 overflow-x-auto">{input}</p>
         </div>
         <div className="bg-seaGreen h-auto rounded-xl pt-5 pl-4 pb-8">
           {keys.map((item) => {
