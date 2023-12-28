@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 
 export default function Home() {
@@ -15,7 +14,7 @@ export default function Home() {
     },
     {
       id: 3,
-      title: "=",
+      title: "%",
     },
     {
       id: 4,
@@ -82,22 +81,25 @@ export default function Home() {
       title: ".",
     },
   ]);
-  const [input, setInput] = useState(0);
-  const [result, setResult] = useState(0);
+  const [input, setInput] = useState('');
+  const [result, setResult] = useState('');
 
   const handleInputClick = (item) => {
-    if(item.title !== "DEL" || item.title !== "LOG" !== item.title !== "=" || item.title !== "RESULT") {
+    if (item.title === "DEL") {
+      handleClear();
+    } else if (item.title === "LOG") {
+      handleLog();
+    } else if (item.title === "%") {
+      handlePercentage();
+    } else {
       setInput((prevInput) => prevInput + item.title);
-    } else if(item.title === "DEL"){
-      console.log('inside else if')
-      setInput('');
-      setResult('Error');
     }
   }
 
   const handleCalculate = () => {
     try {
-      const result = new Function(`return ${input.replace(/[*]/g, '*')}`)();
+      const sanitizedExpression = input.replace(/[^-()\d/*+.]/g, '');
+      const result = new Function(`return ${sanitizedExpression}`)();
       setResult(result.toString());
     } catch (error) {
       console.log('error', error)
@@ -105,12 +107,35 @@ export default function Home() {
     }
   }
 
+  const handleClear = () => {
+    setInput('');
+    setResult('');
+  }
+
+  const handleLog = () => {
+    try {
+      const result = Math.log(parseFloat(input));
+      setResult(result.toString());
+    } catch (error) {
+      setResult('Error');
+    }
+  };
+
+  const handlePercentage = () => {
+    try {
+      const result = parseFloat(input) / 100;
+      setResult(result.toString());
+    } catch (error) {
+      setResult('Error');
+    }
+  };
+
   return (
     <main className="h-screen flex items-center justify-center">
       <div className="h-[551px] w-80 bg-yellowish rounded-xl border-4 border-black shadow-[20px_20px_0px_0px_#000000]">
         <div className="text-right px-5 py-7">
-          <p className="text-4xl font-bold">{result}</p>
-          <p className="text-md pt-3 overflow-x-auto">{input}</p>
+          <p className="text-4xl font-bold overflow-x-auto">{result === '' ? 0 : result}</p>
+          <p className="text-md pt-3 overflow-x-auto">{input === '' ? 0 : input}</p>
         </div>
         <div className="bg-seaGreen h-auto rounded-xl pt-5 pl-4 pb-8">
           {keys.map((item) => {
